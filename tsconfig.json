@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "paths": {
+      "@modules/*": ["./src/modules/*"],
+      "@common/*": ["./src/common/*"]
+    },
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "resolvePackageJsonExports": true,
