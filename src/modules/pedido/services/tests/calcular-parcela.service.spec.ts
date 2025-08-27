@@ -58,11 +58,11 @@ describe('CalcularParcelaService', () => {
     });
   });
 
-  describe('ajustarDataParaDiaUtil', () => {
+  describe('ajustarParaProximoDiaUtil', () => {
     it('deve ajustar data para segunda-feira se cair em um domingo', () => {
       const sut = makeSut();
 
-      expect(sut['ajustarDataParaDiaUtil'](new Date('2023-01-01'))).toEqual(
+      expect(sut['ajustarParaProximoDiaUtil'](new Date('2023-01-01'))).toEqual(
         new Date('2023-01-02'),
       );
     });
@@ -70,7 +70,7 @@ describe('CalcularParcelaService', () => {
     it('deve ajustar data para segunda-feira se cair em um sábado', () => {
       const sut = makeSut();
 
-      expect(sut['ajustarDataParaDiaUtil'](new Date('2023-01-07'))).toEqual(
+      expect(sut['ajustarParaProximoDiaUtil'](new Date('2023-01-07'))).toEqual(
         new Date('2023-01-09'),
       );
     });
@@ -78,8 +78,66 @@ describe('CalcularParcelaService', () => {
     it('deve retornar a mesma data se cair em um dia útil', () => {
       const sut = makeSut();
 
-      expect(sut['ajustarDataParaDiaUtil'](new Date('2023-01-03'))).toEqual(
+      expect(sut['ajustarParaProximoDiaUtil'](new Date('2023-01-03'))).toEqual(
         new Date('2023-01-03'),
+      );
+    });
+  });
+
+  describe('calcularNumeroParcelas', () => {
+    it('deve retornar o numero de parcelas considerando que o cliente está inadimplente', () => {
+      const sut = makeSut();
+
+      expect(
+        sut['calcularNumeroParcelas'](
+          new Date('2023-01-01'),
+          new Date('2023-12-31'),
+          true,
+        ),
+      ).toBe(12);
+    });
+
+    it('deve retornar o numero de parcelas considerando que o cliente não está inadimplente', () => {
+      const sut = makeSut();
+
+      expect(
+        sut['calcularNumeroParcelas'](
+          new Date('2023-01-01'),
+          new Date('2023-12-31'),
+          false,
+        ),
+      ).toBe(15);
+    });
+  });
+
+  describe('calcularMesesParaAdicionar', () => {
+    it('deve retornar 1 para a segunda parcela se a primeira parcela for no começo do mês', () => {
+      const sut = makeSut();
+
+      expect(sut['calcularMesesParaAdicionar'](2, new Date('2023-01-05'))).toBe(
+        1,
+      );
+      expect(sut['calcularMesesParaAdicionar'](2, new Date('2023-01-10'))).toBe(
+        1,
+      );
+    });
+
+    it('deve retornar 2 para a segunda parcela se a primeira parcela for no fim do mês', () => {
+      const sut = makeSut();
+
+      expect(sut['calcularMesesParaAdicionar'](2, new Date('2023-01-21'))).toBe(
+        2,
+      );
+      expect(sut['calcularMesesParaAdicionar'](2, new Date('2023-01-25'))).toBe(
+        2,
+      );
+    });
+
+    it('deve retornar 1 para as demais parcelas', () => {
+      const sut = makeSut();
+
+      expect(sut['calcularMesesParaAdicionar'](3, new Date('2023-01-05'))).toBe(
+        1,
       );
     });
   });

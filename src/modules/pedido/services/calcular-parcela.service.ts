@@ -1,12 +1,16 @@
 import { dayjs } from '@common/libs/dayjs.lib';
+import { truncateDecimal } from '@common/utils/truncate-decimal.util';
 
 interface CalcularParcelaServiceRequest {
   dataCompra: Date;
   dataEntrega: Date;
+  valorTotal: number;
   estaInadimplente: boolean;
 }
 
 interface CalcularParcelaServiceResponse {
+  numeroParcela: number;
+  valorParcela: number;
   dataVencimento: Date;
 }
 
@@ -14,9 +18,57 @@ export class CalcularParcelaService {
   execute({
     dataCompra,
     dataEntrega,
+    valorTotal,
     estaInadimplente,
   }: CalcularParcelaServiceRequest): CalcularParcelaServiceResponse[] {
-    return [];
+    const parcelas: CalcularParcelaServiceResponse[] = [];
+
+    const diaVencimento = this.obterDiaVencimento(dataCompra);
+    const numeroParcelas = this.calcularNumeroParcelas(
+      dataCompra,
+      dataEntrega,
+      estaInadimplente,
+    );
+    const valorParcela = truncateDecimal(valorTotal / numeroParcelas);
+
+    const dataBasePrimeiraParcela = dayjs.utc(dataCompra).add(2, 'day');
+    const dataPrimeiraParcela = this.ajustarParaProximoDiaUtil(
+      dataBasePrimeiraParcela.toDate(),
+    );
+
+    parcelas.push({
+      numeroParcela: 1,
+      valorParcela,
+      dataVencimento: dataPrimeiraParcela,
+    });
+
+    for (
+      let numeroParcela = 2;
+      numeroParcela <= numeroParcelas;
+      numeroParcela++
+    ) {
+      const ultimaDataParcela = parcelas[numeroParcela - 2].dataVencimento;
+      const mesesParaAdicionar = this.calcularMesesParaAdicionar(
+        numeroParcela,
+        dataPrimeiraParcela,
+      );
+
+      const dataBaseParcela = dayjs
+        .utc(ultimaDataParcela)
+        .add(mesesParaAdicionar, 'month')
+        .date(diaVencimento);
+      const dataParcela = this.ajustarParaProximoDiaUtil(
+        dataBaseParcela.toDate(),
+      );
+
+      parcelas.push({
+        numeroParcela,
+        valorParcela,
+        dataVencimento: dataParcela,
+      });
+    }
+
+    return parcelas;
   }
 
   private obterDiaVencimento(dataCompra: Date): number {
@@ -29,7 +81,7 @@ export class CalcularParcelaService {
     return 5;
   }
 
-  private ajustarDataParaDiaUtil(data: Date): Date {
+  private ajustarParaProximoDiaUtil(data: Date): Date {
     const dataDayjs = dayjs.utc(data);
 
     const diaSemana = dataDayjs.day();
@@ -41,5 +93,31 @@ export class CalcularParcelaService {
     if (ehSabado) return dataDayjs.add(2, 'day').toDate();
 
     return dataDayjs.toDate();
+  }
+
+  private calcularNumeroParcelas(
+    dataCompra: Date,
+    dataEntrega: Date,
+    estaInadimplente: boolean,
+  ): number {
+    const quantidadeParcelas =
+      dayjs(dataEntrega).diff(dayjs(dataCompra), 'month') + 1;
+
+    return estaInadimplente ? quantidadeParcelas : quantidadeParcelas + 3;
+  }
+
+  private calcularMesesParaAdicionar(
+    numeroParcela: number,
+    dataPrimeiraParcela: Date,
+  ): number {
+    const ehSegundaParcela = numeroParcela === 2;
+
+    const primeiraParcelaNoFimDoMes =
+      dayjs.utc(dataPrimeiraParcela).date() >=
+      dayjs.utc(dataPrimeiraParcela).daysInMonth() - 10;
+
+    if (ehSegundaParcela && primeiraParcelaNoFimDoMes) return 2;
+
+    return 1;
   }
 }
