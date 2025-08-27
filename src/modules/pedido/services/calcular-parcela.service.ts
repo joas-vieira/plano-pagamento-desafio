@@ -9,7 +9,7 @@ interface CalcularParcelaServiceRequest {
   estaInadimplente: boolean;
 }
 
-interface CalcularParcelaServiceResponse {
+export interface CalcularParcelaServiceResponse {
   numeroParcela: number;
   valorParcela: number;
   dataVencimento: Date;
