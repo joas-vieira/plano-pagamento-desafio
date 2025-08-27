@@ -5,6 +5,179 @@ describe('CalcularParcelaService', () => {
 
   afterEach(() => jest.clearAllMocks());
 
+  describe('execute', () => {
+    it('deve calcular as parcelas corretamente quando o cliente está inadimplente', () => {
+      const sut = makeSut();
+
+      const response = sut.execute({
+        dataCompra: new Date('2023-01-01'),
+        dataEntrega: new Date('2023-12-01'),
+        valorTotal: 2000,
+        estaInadimplente: true,
+      });
+
+      expect(response).toHaveLength(12);
+      expect(response).toEqual([
+        {
+          dataVencimento: new Date('2023-01-03T00:00:00.000Z'),
+          numeroParcela: 1,
+          valorParcela: 166.66,
+        },
+
+        {
+          dataVencimento: new Date('2023-02-06T00:00:00.000Z'),
+          numeroParcela: 2,
+          valorParcela: 166.66,
+        },
+
+        {
+          dataVencimento: new Date('2023-03-06T00:00:00.000Z'),
+          numeroParcela: 3,
+          valorParcela: 166.66,
+        },
+
+        {
+          dataVencimento: new Date('2023-04-05T00:00:00.000Z'),
+          numeroParcela: 4,
+          valorParcela: 166.66,
+        },
+
+        {
+          dataVencimento: new Date('2023-05-05T00:00:00.000Z'),
+          numeroParcela: 5,
+          valorParcela: 166.66,
+        },
+
+        {
+          dataVencimento: new Date('2023-06-05T00:00:00.000Z'),
+          numeroParcela: 6,
+          valorParcela: 166.66,
+        },
+
+        {
+          dataVencimento: new Date('2023-07-05T00:00:00.000Z'),
+          numeroParcela: 7,
+          valorParcela: 166.66,
+        },
+        {
+          dataVencimento: new Date('2023-08-07T00:00:00.000Z'),
+          numeroParcela: 8,
+          valorParcela: 166.66,
+        },
+        {
+          dataVencimento: new Date('2023-09-05T00:00:00.000Z'),
+          numeroParcela: 9,
+          valorParcela: 166.66,
+        },
+        {
+          dataVencimento: new Date('2023-10-05T00:00:00.000Z'),
+          numeroParcela: 10,
+          valorParcela: 166.66,
+        },
+        {
+          dataVencimento: new Date('2023-11-06T00:00:00.000Z'),
+          numeroParcela: 11,
+          valorParcela: 166.66,
+        },
+        {
+          dataVencimento: new Date('2023-12-05T00:00:00.000Z'),
+          numeroParcela: 12,
+          valorParcela: 166.66,
+        },
+      ]);
+    });
+
+    it('deve calcular as parcelas corretamente quando o cliente não está inadimplente', () => {
+      const sut = makeSut();
+
+      const response = sut.execute({
+        dataCompra: new Date('2023-01-01'),
+        dataEntrega: new Date('2023-12-01'),
+        valorTotal: 1500,
+        estaInadimplente: false,
+      });
+
+      expect(response).toHaveLength(15);
+      expect(response).toEqual([
+        {
+          numeroParcela: 1,
+          valorParcela: 100,
+          dataVencimento: new Date('2023-01-03T00:00:00.000Z'),
+        },
+        {
+          numeroParcela: 2,
+          valorParcela: 100,
+          dataVencimento: new Date('2023-02-06T00:00:00.000Z'),
+        },
+        {
+          numeroParcela: 3,
+          valorParcela: 100,
+          dataVencimento: new Date('2023-03-06T00:00:00.000Z'),
+        },
+        {
+          numeroParcela: 4,
+          valorParcela: 100,
+          dataVencimento: new Date('2023-04-05T00:00:00.000Z'),
+        },
+        {
+          numeroParcela: 5,
+          valorParcela: 100,
+          dataVencimento: new Date('2023-05-05T00:00:00.000Z'),
+        },
+        {
+          numeroParcela: 6,
+          valorParcela: 100,
+          dataVencimento: new Date('2023-06-05T00:00:00.000Z'),
+        },
+        {
+          numeroParcela: 7,
+          valorParcela: 100,
+          dataVencimento: new Date('2023-07-05T00:00:00.000Z'),
+        },
+        {
+          numeroParcela: 8,
+          valorParcela: 100,
+          dataVencimento: new Date('2023-08-07T00:00:00.000Z'),
+        },
+        {
+          numeroParcela: 9,
+          valorParcela: 100,
+          dataVencimento: new Date('2023-09-05T00:00:00.000Z'),
+        },
+        {
+          numeroParcela: 10,
+          valorParcela: 100,
+          dataVencimento: new Date('2023-10-05T00:00:00.000Z'),
+        },
+        {
+          numeroParcela: 11,
+          valorParcela: 100,
+          dataVencimento: new Date('2023-11-06T00:00:00.000Z'),
+        },
+        {
+          numeroParcela: 12,
+          valorParcela: 100,
+          dataVencimento: new Date('2023-12-05T00:00:00.000Z'),
+        },
+        {
+          numeroParcela: 13,
+          valorParcela: 100,
+          dataVencimento: new Date('2024-01-05T00:00:00.000Z'),
+        },
+        {
+          numeroParcela: 14,
+          valorParcela: 100,
+          dataVencimento: new Date('2024-02-05T00:00:00.000Z'),
+        },
+        {
+          numeroParcela: 15,
+          valorParcela: 100,
+          dataVencimento: new Date('2024-03-05T00:00:00.000Z'),
+        },
+      ]);
+    });
+  });
+
   describe('obterDiaVencimento', () => {
     it('deve retornar 5 se o dia da compra for entre 1 e 5', () => {
       const sut = makeSut();

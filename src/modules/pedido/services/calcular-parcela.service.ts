@@ -1,5 +1,6 @@
 import { dayjs } from '@common/libs/dayjs.lib';
 import { truncateDecimal } from '@common/utils/truncate-decimal.util';
+import { Logger } from '@nestjs/common';
 
 interface CalcularParcelaServiceRequest {
   dataCompra: Date;
@@ -15,12 +16,16 @@ interface CalcularParcelaServiceResponse {
 }
 
 export class CalcularParcelaService {
+  private readonly logger = new Logger(CalcularParcelaService.name);
+
   execute({
     dataCompra,
     dataEntrega,
     valorTotal,
     estaInadimplente,
   }: CalcularParcelaServiceRequest): CalcularParcelaServiceResponse[] {
+    this.logger.log('Iniciando cálculo das parcelas');
+
     const parcelas: CalcularParcelaServiceResponse[] = [];
 
     const diaVencimento = this.obterDiaVencimento(dataCompra);
@@ -31,9 +36,17 @@ export class CalcularParcelaService {
     );
     const valorParcela = truncateDecimal(valorTotal / numeroParcelas);
 
+    this.logger.log(`Valor da parcela: ${valorParcela}`);
+    this.logger.log(`Número de parcelas: ${numeroParcelas}`);
+    this.logger.log(`Dia de vencimento: ${diaVencimento}`);
+
     const dataBasePrimeiraParcela = dayjs.utc(dataCompra).add(2, 'day');
     const dataPrimeiraParcela = this.ajustarParaProximoDiaUtil(
       dataBasePrimeiraParcela.toDate(),
+    );
+
+    this.logger.log(
+      `Data de vencimento da primeira parcela: ${dataPrimeiraParcela.toISOString()}`,
     );
 
     parcelas.push({
@@ -67,6 +80,8 @@ export class CalcularParcelaService {
         dataVencimento: dataParcela,
       });
     }
+
+    this.logger.log('Cálculo das parcelas finalizado');
 
     return parcelas;
   }
