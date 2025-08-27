@@ -57,4 +57,30 @@ describe('CalcularParcelaService', () => {
       expect(sut['obterDiaVencimento'](new Date('2023-01-31'))).toBe(5);
     });
   });
+
+  describe('ajustarDataParaDiaUtil', () => {
+    it('deve ajustar data para segunda-feira se cair em um domingo', () => {
+      const sut = makeSut();
+
+      expect(sut['ajustarDataParaDiaUtil'](new Date('2023-01-01'))).toEqual(
+        new Date('2023-01-02'),
+      );
+    });
+
+    it('deve ajustar data para segunda-feira se cair em um sábado', () => {
+      const sut = makeSut();
+
+      expect(sut['ajustarDataParaDiaUtil'](new Date('2023-01-07'))).toEqual(
+        new Date('2023-01-09'),
+      );
+    });
+
+    it('deve retornar a mesma data se cair em um dia útil', () => {
+      const sut = makeSut();
+
+      expect(sut['ajustarDataParaDiaUtil'](new Date('2023-01-03'))).toEqual(
+        new Date('2023-01-03'),
+      );
+    });
+  });
 });
