@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 import { ErrorResponse } from '@common/contracts/error-response.contract';
 import { HttpStatus } from '@nestjs/common';
 import { AxiosError } from 'axios';

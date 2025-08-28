@@ -8,6 +8,7 @@ const config: Config = {
   transform: { '^.+\\.ts$': 'ts-jest' },
   collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
   coverageDirectory: 'coverage',
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 };
 
 export default config;
