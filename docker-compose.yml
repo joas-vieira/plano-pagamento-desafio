@@ -1,0 +1,15 @@
+services:
+  api:
+    container_name: api
+    image: api:1.0.0
+    build:
+      context: .
+      target: base
+    user: node
+    command: sh -c "npm install && ${START_COMMAND}"
+    ports:
+      - ${PORT}:${PORT}
+      - 9229:9229
+    volumes:
+      - .:/usr/src/app
+    restart: unless-stopped
