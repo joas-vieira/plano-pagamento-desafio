@@ -5,6 +5,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CALCULAR_PARCELAMENTO } from './docs/calcular-parcelamento.doc';
 import { CalcularParcelamentoRequestDto } from './dtos/request/calcular-parcelamento.dto';
 import { CalcularParcelamentoResponseDto } from './dtos/response/calcular-parcelamento.dto';
+import { ValidarDatasCompraEntregaPipe } from './pipes/validar-datas-compra-entrega.pipe';
 import { CalcularParcelaService } from './services/calcular-parcela.service';
 
 @Controller('pedido')
@@ -21,7 +22,7 @@ export class PedidoController {
   @ApiResponse(CALCULAR_PARCELAMENTO)
   @HttpCode(200)
   calcularParcelamento(
-    @Body() body: CalcularParcelamentoRequestDto,
+    @Body(ValidarDatasCompraEntregaPipe) body: CalcularParcelamentoRequestDto,
   ): CalcularParcelamentoResponseDto[] {
     const parcelas = this.calcularParcelaService.execute(body);
 
