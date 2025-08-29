@@ -1,5 +1,5 @@
 import { dayjs } from '@common/libs/dayjs.lib';
-import { truncateDecimal } from '@common/utils/truncate-decimal.util';
+import { truncateDecimal } from '@common/utils/truncate-decimal';
 import { Logger } from '@nestjs/common';
 
 interface CalcularParcelaServiceRequest {

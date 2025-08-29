@@ -8,7 +8,7 @@ import { CalcularParcelamentoResponseDto } from './dtos/response/calcular-parcel
 import { ValidarDatasCompraEntregaPipe } from './pipes/validar-datas-compra-entrega.pipe';
 import { CalcularParcelaService } from './services/calcular-parcela.service';
 
-@Controller('pedido')
+@Controller('pedidos')
 @ApiTags('Módulo Pedido')
 @ApiResponse(BAD_REQUEST)
 @ApiResponse(INTERNAL_SERVER_ERROR)
