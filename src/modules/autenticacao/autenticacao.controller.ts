@@ -9,7 +9,7 @@ import { AutenticarUsuarioRequestDto } from './dtos/request/autenticar-usuario.d
 import { RegistrarUsuarioRequestDto } from './dtos/request/registrar-usuario.dto';
 import { AutenticarUsuarioResponseDto } from './dtos/response/autenticar-usuario.dto';
 import { RegistrarUsuarioResponseDto } from './dtos/response/registrar-usuario.dto';
-import { EmailUnicoPipe } from './pipes/validar-datas-compra-entrega.pipe';
+import { EmailUnicoPipe } from './pipes/email-unico.pipe';
 import { AutenticarUsuarioService } from './services/autenticar-usuario.service';
 import { RegistrarUsuarioService } from './services/registrar-usuario.service';
 
