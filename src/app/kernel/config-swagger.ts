@@ -14,9 +14,12 @@ export const configSwagger = (app: NestFastifyApplication) => {
     .setTitle('API Documentation')
     .setDescription('API description')
     .setVersion(version)
+    .addBearerAuth({ type: 'http' }, 'Authorization')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
 
-  SwaggerModule.setup('api-docs', app, document);
+  SwaggerModule.setup('api-docs', app, document, {
+    swaggerOptions: { persistAuthorization: true },
+  });
 };
