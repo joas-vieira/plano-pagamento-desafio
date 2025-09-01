@@ -3,10 +3,16 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AutenticacaoController } from './autenticacao.controller';
 import { RegistrarUsuarioService } from './services/registrar-usuario.service';
+import { AutenticarUsuarioService } from './services/autenticar-usuario.service';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtConfig } from './configs/jwt.config';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UsuarioEntity])],
+  imports: [
+    JwtModule.registerAsync({ useClass: JwtConfig }),
+    TypeOrmModule.forFeature([UsuarioEntity]),
+  ],
   controllers: [AutenticacaoController],
-  providers: [RegistrarUsuarioService],
+  providers: [RegistrarUsuarioService, AutenticarUsuarioService],
 })
 export class AutenticacaoModule {}

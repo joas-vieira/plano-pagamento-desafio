@@ -5,6 +5,9 @@ const configuration = () => ({
   mode: env.MODE || 'development',
   nodeEnv: env.NODE_ENV || 'development',
   port: Number(env.PORT) || 3000,
+  jwt: {
+    secret: env.JWT_SECRET,
+  },
   database: {
     default: {
       host: env.DEFAULT_DATABASE_HOST,

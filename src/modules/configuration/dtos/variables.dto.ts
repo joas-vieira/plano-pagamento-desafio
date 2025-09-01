@@ -10,6 +10,9 @@ export class VariablesDTO {
   START_COMMAND: string;
 
   @IsString()
+  JWT_SECRET: string;
+
+  @IsString()
   DEFAULT_DATABASE_HOST: string;
   @IsNumber()
   DEFAULT_DATABASE_PORT: number;
