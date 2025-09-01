@@ -2,7 +2,7 @@ import { ErrorResponse } from '@common/contracts/error-response.contract';
 import { HttpStatus } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class InternalServerErrorDTO implements ErrorResponse {
+export class InternalServerErrorDto implements ErrorResponse {
   @ApiProperty({
     example: 'Erro interno no servidor',
   })
